@@ -1,5 +1,6 @@
 import streamlit as st
-import jsonschema2tree as j2t
+import json
+from jsonschema import validate
 
 # Title of the Streamlit app
 st.title("JSON Tree Viewer")
@@ -12,13 +13,22 @@ if uploaded_file is not None:
         # Read the uploaded JSON data
         data = json.load(uploaded_file)
 
-        # Convert JSON data to a collapsible tree
-        tree_data = j2t.convert(data)
-
         # Display the tree view of the JSON data
         st.write("## Explore JSON Data")
         st.write("Use the tree view below to explore the JSON data:")
-        st.json(tree_data)
+
+        # Define a recursive function to display JSON data in a collapsible format
+        def display_json(data, parent="root"):
+            for key, value in data.items():
+                if isinstance(value, dict):
+                    st.json({key: display_json(value, key)})
+                elif isinstance(value, list):
+                    for i, item in enumerate(value):
+                        st.json({f"{key}[{i}]": display_json(item, f"{key}[{i}]")})
+                else:
+                    st.text(f"{key}: {value}")
+
+        display_json(data)
     except json.JSONDecodeError:
         st.error("Invalid JSON format. Please upload a valid JSON file.")
     except Exception as e:
