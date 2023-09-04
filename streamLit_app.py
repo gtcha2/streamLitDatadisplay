@@ -6,6 +6,7 @@ from treelib import Tree
 def build_tree(data, parent=None, tree=None):
     if tree is None:
         tree = Tree()
+        tree.create_node("Root", "root")
         parent = "root"  # Initialize parent to "root" for the root node
     
     try:
