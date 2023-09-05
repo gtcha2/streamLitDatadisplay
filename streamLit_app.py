@@ -1,35 +1,52 @@
 import streamlit as st
+import pandas as pd
 import json
-from jsonschema import validate
 
-# Title of the Streamlit app
-st.title("JSON Tree Viewer")
+from utils import get_comments
 
-# Create a file uploader to upload JSON data
-uploaded_file = st.file_uploader("Upload JSON File", type=["json"])
-
-if uploaded_file is not None:
-    try:
-        # Read the uploaded JSON data
+# Load JSON data
+uploaded_file = st.sidebar.file_uploader("Choose a JSON file or use the default", type="json")
+data = None
+while data is None:
+    if uploaded_file is not None:
         data = json.load(uploaded_file)
+    else:
+        try:
+            with open('reddit_dummy_data.json') as f:
+                data = json.load(f)
+        except FileNotFoundError:
+            st.error('Default file not found. Please upload a file.')
+            continue
 
-        # Display the tree view of the JSON data
-        st.write("## Explore JSON Data")
-        st.write("Use the tree view below to explore the JSON data:")
+# Create a list of subreddit names
+subreddits = list(data.keys())
 
-        # Define a recursive function to display JSON data in a collapsible format
-        def display_json(data, parent="root"):
-            for key, value in data.items():
-                if isinstance(value, dict):
-                    st.json({key: display_json(value, key)})
-                elif isinstance(value, list):
-                    for i, item in enumerate(value):
-                        st.json({f"{key}[{i}]": display_json(item, f"{key}[{i}]")})
-                else:
-                    st.text(f"{key}: {value}")
+# Create a sidebar for subreddit selection
+subreddit = st.sidebar.selectbox('Choose a subreddit', subreddits)
 
-        display_json(data)
-    except json.JSONDecodeError:
-        st.error("Invalid JSON format. Please upload a valid JSON file.")
-    except Exception as e:
-        st.error(f"An error occurred: {str(e)}")
+# Display the selected subreddit
+st.title(f'Selected subreddit: {subreddit}')
+
+# Get the posts from the selected subreddit
+posts = data[subreddit]
+
+# Create a list of post ids
+post_ids = [post['id'] for post in posts]
+
+# Create a sidebar for post selection
+post_id = st.sidebar.selectbox('Choose a post', post_ids)
+
+# Get the selected post
+post = next(post for post in posts if post['id'] == post_id)
+
+# Display the selected post
+st.subheader('Selected post:')
+st.write(post['selftext'])
+
+# Get the comments from the selected post using the get_comments function from utils.py
+comments = get_comments(data, subreddit, post_id)
+
+# Display the comments
+st.subheader('Comments:')
+for comment in comments:
+    st.write(comment['body'])
