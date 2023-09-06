@@ -17,7 +17,13 @@ while data is None:
         except FileNotFoundError:
             st.error('Default file not found. Please upload a file.')
             continue
+def display_comment(comment, depth=0):
+    indent = "  " * depth
+    st.write(f"{indent}- {comment['body']}")
 
+    if 'replies' in comment:
+        for reply in comment['replies']:
+            display_comment(reply, depth + 1)
 # Create a list of subreddit names
 subreddits = list(data.keys())
 
@@ -49,4 +55,4 @@ comments = get_comments(data, subreddit, post_id)
 # Display the comments
 st.subheader('Comments:')
 for comment in comments:
-    st.write(comment['body'])
+    display_comment(comment)
