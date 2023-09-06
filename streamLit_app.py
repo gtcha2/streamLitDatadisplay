@@ -4,7 +4,7 @@ import json
 
 from utils import get_comments
 
-# Load JSON data
+# Load JSON data  
 uploaded_file = st.sidebar.file_uploader("Choose a JSON file or use the default", type="json")
 data = None
 while data is None:
@@ -38,7 +38,7 @@ post_id = st.sidebar.selectbox('Choose a post', post_ids)
 
 # Get the selected post
 post = next(post for post in posts if post['id'] == post_id)
-
+print(post)
 # Display the selected post
 st.subheader('Selected post:')
 st.write(post['selftext'])
