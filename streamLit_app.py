@@ -20,7 +20,7 @@ while data is None:
 def display_comment(comment, depth=0):
     indent = "----" * depth
     # st.write(f"depth:{depth}{indent}- {comment['body']}")
-    print(comment.keys())
+    
     st.write(f"depth:{comment['depth']}")
 # Display HTML conten
     st.markdown(comment['body_html'], unsafe_allow_html=True)
