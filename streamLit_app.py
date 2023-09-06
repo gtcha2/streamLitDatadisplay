@@ -21,7 +21,7 @@ def display_comment(comment, depth=0):
     indent = "----" * depth
     # st.write(f"depth:{depth}{indent}- {comment['body']}")
     
-    st.write(f"depth:{comment['depth']}")
+    st.write(f"depth:{comment['depth']} {depth}")
 # Display HTML conten
     st.markdown(comment['body_html'], unsafe_allow_html=True)
     if 'replies' in comment:
