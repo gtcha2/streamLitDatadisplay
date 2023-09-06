@@ -19,7 +19,7 @@ while data is None:
             continue
 def display_comment(comment, depth=0):
     indent = "  " * depth
-    st.write(f"{indent}- {comment['body']}")
+    st.write(f"depth:{depth} + {indent}- {comment['body']}")
 
     if 'replies' in comment:
         for reply in comment['replies']:
