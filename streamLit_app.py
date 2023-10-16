@@ -151,8 +151,9 @@ uploaded_file = st.sidebar.file_uploader("Choose a JSON file or use the default"
 
 
 
-st.text("")
-st.text("")
+st.markdown("<br><br><br><br><br><br><br>", unsafe_allow_html=True)
+
+
 
 data = None
 while data is None:
