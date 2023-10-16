@@ -148,6 +148,11 @@ with st.container():
 uploaded_file = st.sidebar.file_uploader("Choose a JSON file or use the default", type="json")
 #HERE is where my code starts
 
+
+
+
+st.empty()
+
 data = None
 while data is None:
     if uploaded_file is not None:
