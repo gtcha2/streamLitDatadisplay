@@ -151,7 +151,8 @@ uploaded_file = st.sidebar.file_uploader("Choose a JSON file or use the default"
 
 
 
-st.empty()
+st.text("")
+st.text("")
 
 data = None
 while data is None:
