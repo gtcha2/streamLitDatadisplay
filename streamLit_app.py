@@ -2,11 +2,12 @@ import streamlit as st
 import gspread
 import json
 import random
-
+import os
 st.set_page_config(page_title='Label Medical Misinformation', page_icon=':face_with_thermometer:', layout='wide')
 
 # Initialize Google Sheets with service account credentials
 # gc = gspread.service_account(filename='llms-for-misinformation-196fdd9cebe7.json')
+os.environ["reddit_data"]="reddit_dummy_data.json"
 secrets_dict = {
     "type": st.secrets["type"],
     "project_id": st.secrets["project_id"],
@@ -211,7 +212,7 @@ with st.container():
 
     if userID:
         # Load your JSON data
-        with open('reddit_data1.json', 'r') as json_file:
+        with open(os.environ["reddit_data"], 'r') as json_file:
             data = json.load(json_file)
             data = preprocess_json_data(data)
 
