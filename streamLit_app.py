@@ -23,8 +23,6 @@ secrets_dict = {
 }
 
 
-
-
 st.set_page_config(page_title='Label Medical Misinformation', page_icon=':face_with_thermometer:', layout='wide')
 
 # Initialize Google Sheets with service account credentials
