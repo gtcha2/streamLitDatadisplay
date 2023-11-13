@@ -23,6 +23,8 @@ secrets_dict = {
 }
 
 
+
+
 gc = gspread.service_account_from_dict(secrets_dict)
 
 # Public Google Sheet URL (replace with your URL)
