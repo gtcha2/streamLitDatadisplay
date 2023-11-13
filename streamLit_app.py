@@ -23,10 +23,10 @@ secrets_dict = {
 }
 
 
-st.set_page_config(page_title='Label Medical Misinformation', page_icon=':face_with_thermometer:', layout='wide')
+gc = gspread.service_account_from_dict(secrets_dict)
 
-# Initialize Google Sheets with service account credentials
-gc = gspread.service_account(filename='llms-for-misinformation-196fdd9cebe7.json')
+# Public Google Sheet URL (replace with your URL)
+
 
 # Public Google Sheet URL (replace with your URL)
 sheet_url = 'https://docs.google.com/spreadsheets/d/1Srh7lQffIXZQEJA0eBImE9LiTf0lJWZ-cvKuaDmqI7Y/edit'
