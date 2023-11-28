@@ -281,7 +281,7 @@ with st.container():
         # max file size: 25 MB per file
 
         # Load your JSON data
-        with open('reddit_data1.json', 'r') as json_file:
+        with open(os.environ["reddit_data"], 'r') as json_file:
             data = json.load(json_file)
             data = preprocess_json_data(data)
 
