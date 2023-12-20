@@ -32,11 +32,11 @@ FILE_ID = '1-N2U3DM1-RLbmM0ezSSj_r1jBwdDrwOU'
 
 # Get the current working directory
 CURRENT_DIRECTORY = os.getcwd()
-print(CURRENT_DIRECTORY)
+st.write(CURRENT_DIRECTORY)
 credentials=service_account.Credentials.from_service_account_info(secrets_dict)
 # Build the Google Drive API client
 drive_service = build('drive', 'v3', credentials=credentials)
-print("build complete")
+st.write("build complete")
 # Retrieve the file metadata
 file_metadata = drive_service.files().get(fileId=FILE_ID).execute()
 
@@ -47,14 +47,14 @@ file_name = file_metadata['name']
 local_file_path = os.path.join(CURRENT_DIRECTORY, file_name)
 if not os.path.exists(local_file_path):
     # Download the file
-    print("got here")
+    st.write("got here")
     request = drive_service.files().get_media(fileId=FILE_ID)
     
     with open(local_file_path, 'wb') as file:
         media_request = request.execute()
         file.write(media_request)
-    print("complete")
-print(f"File '{file_name}' has been downloaded to '{local_file_path}'.")
+    st.write("complete")
+st.write(f"File '{file_name}' has been downloaded to '{local_file_path}'.")
 
 
 
