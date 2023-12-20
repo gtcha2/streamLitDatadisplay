@@ -54,8 +54,9 @@ if not os.path.exists(local_file_path):
         media_request = request.execute()
         file.write(media_request)
     st.write("complete")
+    
 st.write(f"File '{file_name}' has been downloaded to '{local_file_path}'.")
-
+os.environ["reddit_data"] = "reddit_data1.json"
 
 
 gc = gspread.service_account_from_dict(secrets_dict)
