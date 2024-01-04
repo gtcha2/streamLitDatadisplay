@@ -96,24 +96,25 @@ h2 {
     color: #e74c3c;
     font-size: 18px;
 }
-/* Target the radio buttons in the main content area, excluding sidebar */
+/* Apply flexbox layout to all radio button groups */
         div[data-testid="stRadio"] > div {
             display: flex;
             flex-wrap: nowrap;
         }
         
-        /* Ensure the labels of the radio buttons do not wrap */
+        /* Ensure all radio button labels do not wrap */
         div[data-testid="stRadio"] > div > label {
             display: flex;
             margin-right: 10px; /* Adjust the spacing between radio buttons */
             white-space: nowrap;
         }
         
-        /* Exclude the radio buttons in the sidebar by resetting to default if inside the sidebar */
-        div[data-testid="stSidebar"] div[data-testid="stRadio"] > div > label {
-            display: inline-block;
+        /* Reset styles for radio buttons that are descendants of the sidebar */
+        section[data-testid="stSidebar"] div[data-testid="stRadio"] > div,
+        section[data-testid="stSidebar"] div[data-testid="stRadio"] > div > label {
+            display: inline; /* This resets the display to default inline flow */
             margin-right: 0;
-            white-space: normal;
+            white-space: normal; /* Allows text to wrap */
         }
 </style>
 """
