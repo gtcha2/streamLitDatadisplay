@@ -96,17 +96,16 @@ h2 {
     color: #e74c3c;
     font-size: 18px;
 }
-/* Target the direct children div of class .stRadio that contains the radio button inputs and labels */
-        div.stRadio > div {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            /* Prevent wrapping of label text */
+ /* Make the radio group container scrollable */
+        .stRadio {
+            overflow-x: auto;
             white-space: nowrap;
         }
-        /* Target the label elements within the .stRadio divs to give them more space */
-        div.stRadio > div > label {
-            margin-right: 1em; /* Adjust this value as needed to fit your layout */
+        /* Prevent individual radio buttons from wrapping */
+        .stRadio > label {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 1em; /* Adjust this value as needed */
         }
 </style>
 """
