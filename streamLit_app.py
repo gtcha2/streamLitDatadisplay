@@ -96,16 +96,23 @@ h2 {
     color: #e74c3c;
     font-size: 18px;
 }
- /* Make the radio group container scrollable */
-        .stRadio {
-            overflow-x: auto;
+ /* Adjust the container of the radio buttons to prevent wrapping */
+        div.stRadio > div {
+            display: flex;
+            flex-wrap: nowrap;
+        }
+        
+        /* Adjust the labels of the radio buttons */
+        div.stRadio > div > label {
+            display: flex;
+            margin-right: 10px; /* Adjust the spacing between radio buttons */
             white-space: nowrap;
         }
-        /* Prevent individual radio buttons from wrapping */
-        .stRadio > label {
-            display: inline-flex;
-            align-items: center;
-            margin-right: 1em; /* Adjust this value as needed */
+        
+        /* Adjust the p element inside the labels to prevent wrapping */
+        div.stRadio > div > label > div > div > p {
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 </style>
 """
