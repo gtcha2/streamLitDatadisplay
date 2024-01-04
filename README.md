@@ -1,3 +1,3 @@
 # streamLitDatadisplay
 
-Very basic exploratory and descriptive website. Will need to make better tools for exploration. 
+Website that displays Reddit information for evaluation
