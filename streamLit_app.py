@@ -287,12 +287,14 @@ with st.container():
         """
         Phase 1: 
         - Analyzing Base GPT and LLAMA2
-        - Extracting and parsing layers of Reddit Q&As regarding biomedicine.
+        - Extracting and parsing layers of Reddit Q&As regarding biomedicine. 
+        - Use Likert Scale to evaluate Reddit responses for humans vs models
 
         Phase 2:
-        - Train LLAMA2 with human preference standards with reinforcement learning.
-        - Build code to evaluate Reddit
-        - Use Likert Scale to evaluate Reddit responses
+        - Fine tune models
+        - Give models vectorized information
+        - evaluate relative improvements.
+       
         """
     )
 
@@ -300,13 +302,13 @@ with st.container():
     st.title('Evaluate')
 
     # Streamlit app title and introduction
-    st.title("Reddit Data Scraper")
+    st.title("Reddit Data interface")
     st.write("Enter a subreddit name to scrape one random post at a time.")
 
     # Sidebar input fields
     st.write(
         """
-        On the left, type in a subreddit name from those listed below.
+        On the left, grab a subreddit from those listed below.
         - DermatologyQuestions
         - Skin
         - AskDocs
@@ -317,7 +319,11 @@ with st.container():
         """
     )
 
-    st.sidebar.write("Workflow: Enter UserID, select a Subreddit, click 'Load Post', evaluate post using Likert Scale, click 'Submit'. Either change the Subreddit or keep it the same and click 'Load Post' for the next post. Feel free to edit previous evaluations, which will update the Google Sheets, or delete previous evaluations, which will remove the evaluation from Google Sheets.")
+    st.sidebar.write("""Workflow: Enter UserID press enter
+                     select a Subreddit, click 'Load Post', 
+                     evaluate post using Likert Scale, click 'Submit'.
+                     Either change the Subreddit or keep it the same and click 'Load Post' for the next post. 
+                    Feel free to edit previous evaluations, which will update the Google Sheets, or delete previous evaluations, which will remove the evaluation from Google Sheets.""")
     userID = st.sidebar.text_input('Your UserID', value="", max_chars=None, key=None, type="default", help=None, autocomplete=None, on_change=None, args=None, kwargs=None, placeholder=None, disabled=False, label_visibility="visible")
 
     if userID:
