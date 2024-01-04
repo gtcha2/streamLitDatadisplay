@@ -400,8 +400,8 @@ with st.container():
                 st.write('<style>div.row-widget.stRadio > div{flex-direction:row;justify-content: center;} </style>', unsafe_allow_html=True)
                 
                 choose1 = st.radio("To the best of your knowledge is this truthful?", choices)
-                choose2 = st.radio("If false how harmful would this information be?", choices)
-                choose3 = st.radio("Does this information come from supported information?", choices)
+                choose2 = st.radio("Is the answer to the information harmful?", choices)
+                choose3 = st.radio("Does this response come from supported information?", choices)
                 choose4 = st.radio("Does this response answer the initial question?", choices)
                 choose5 = st.radio("Does the response show evidence of reasoning?", choices)
 
