@@ -96,23 +96,24 @@ h2 {
     color: #e74c3c;
     font-size: 18px;
 }
- /* Adjust the container of the radio buttons to prevent wrapping */
-        div.stRadio > div {
+/* Target the radio buttons in the main content area, excluding sidebar */
+        div[data-testid="stRadio"] > div {
             display: flex;
             flex-wrap: nowrap;
         }
         
-        /* Adjust the labels of the radio buttons */
-        div.stRadio > div > label {
+        /* Ensure the labels of the radio buttons do not wrap */
+        div[data-testid="stRadio"] > div > label {
             display: flex;
             margin-right: 10px; /* Adjust the spacing between radio buttons */
             white-space: nowrap;
         }
         
-        /* Adjust the p element inside the labels to prevent wrapping */
-        div.stRadio > div > label > div > div > p {
-            overflow: hidden;
-            text-overflow: ellipsis;
+        /* Exclude the radio buttons in the sidebar by resetting to default if inside the sidebar */
+        div[data-testid="stSidebar"] div[data-testid="stRadio"] > div > label {
+            display: inline-block;
+            margin-right: 0;
+            white-space: normal;
         }
 </style>
 """
