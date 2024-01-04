@@ -6,6 +6,8 @@ import os
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
+# what else needs to be completed. 
+# i need to set up the login page. 
 st.set_page_config(page_title='Label Medical Misinformation', page_icon=':face_with_thermometer:', layout='wide')
 
 # Initialize Google Sheets with service account credentials
@@ -32,11 +34,11 @@ FILE_ID = '1-N2U3DM1-RLbmM0ezSSj_r1jBwdDrwOU'
 
 # Get the current working directory
 CURRENT_DIRECTORY = os.getcwd()
-st.write(CURRENT_DIRECTORY)
+
 credentials=service_account.Credentials.from_service_account_info(secrets_dict)
 # Build the Google Drive API client
 drive_service = build('drive', 'v3', credentials=credentials)
-st.write("build complete")
+
 # Retrieve the file metadata
 file_metadata = drive_service.files().get(fileId=FILE_ID).execute()
 
@@ -47,15 +49,15 @@ file_name = file_metadata['name']
 local_file_path = os.path.join(CURRENT_DIRECTORY, file_name)
 if not os.path.exists(local_file_path):
     # Download the file
-    st.write("got here")
+
     request = drive_service.files().get_media(fileId=FILE_ID)
     
     with open(local_file_path, 'wb') as file:
         media_request = request.execute()
         file.write(media_request)
-    st.write("complete")
+
     
-st.write(f"File '{file_name}' has been downloaded to '{local_file_path}'.")
+
 os.environ["reddit_data"] = "reddit_data1.json"
 
 
@@ -218,21 +220,18 @@ def preprocess_json_data(data):
 
     return new_data
 
-def load_random_post(selected_subreddit, userID):
+def load_random_post(selected_subreddit, userID, include_images):
     if selected_subreddit in data:
         all_posts = data[selected_subreddit]
         if all_posts:
-            # Filter out posts with no comments and specific authors
             valid_posts = [
                 post for post in all_posts
-                if post.get('comments') != "[Removed]"  # Check if comments are not "[Removed]"
+                if (include_images or ('thumbnail' in post and (post['thumbnail'] == "self" or post['thumbnail'] == "null")))
+                and post.get('comments') != "[Removed]"
                 and post.get('comments') and not all(comment['author'] == 'AutoModerator' or comment['author'] == 'None' for comment in post['comments'])
                 and (userID, post.get('id'), post.get('comment_index')) not in session_state._state
             ]
             if valid_posts:
-
-                # Should I add functionality here to add the random_post to a list and to choose a different choice if the valid post has already been shown?
-
                 random_post = random.choice(valid_posts)
                 return random_post
     return None
@@ -318,7 +317,9 @@ with st.container():
         with open(os.environ["reddit_data"], 'r') as json_file:
             data = json.load(json_file)
             data = preprocess_json_data(data)
-
+        
+        
+        include_posts_without_images = st.sidebar.checkbox("Include posts without images", value=True)
         # Create a Streamlit dropdown menu for subreddit selection
         selected_subreddit = st.sidebar.selectbox("Select a Subreddit", list(data.keys()))
 
@@ -327,7 +328,7 @@ with st.container():
                 st.session_state.random_post = None
 
             # Load a new random post and store it in the session state
-            st.session_state.random_post = load_random_post(selected_subreddit, userID)
+            st.session_state.random_post = load_random_post(selected_subreddit, userID,include_posts_without_images)
 
         # Get the updated random_post
         random_post = st.session_state.random_post
@@ -478,215 +479,3 @@ with st.container():
 
                 else:
                     st.warning("No data selected for editing")
-# import streamlit as st
-# import pandas as pd
-# import json
-
-# from utils import get_comments
-
-# #TODO: build a selection of posts and evaluations. 
-# # how do you want to build this. 
-# # build the further following. 
-
-
-# # the following needs to be done in t
-
-# # Load JSON data  
-
-
-
-
-# import requests
-# import streamlit as st
-# from streamlit_lottie import st_lottie
-# import pandas as pd
-# import os
-
-# st.set_page_config(page_title='Label Medical Misinformation', page_icon=':face_with_thermometer:', layout='wide')
-
-# class SessionState:
-#     def __init__(self, session):
-#         if 'data' not in session:
-#             session.data = {}
-#         self._state = session.data
-
-#     def get(self, key, default):
-#         return self._state.get(key, default)
-
-#     def set(self, key, value):
-#         self._state[key] = value
-
-#     def delete(self, key):
-#         if key in self._state:
-#             del self._state[key]
-
-# # Create a session state
-# session_state = SessionState(st.session_state)
-
-# def load_lottieurl(url):
-#     r = requests.get(url)
-#     if r.status_code != 200:
-#         return None
-#     return r.json()
-
-# # Load Assets
-# lottie_coding = load_lottieurl('https://lottie.host/736990b8-90e6-4c1a-b273-cc21759292a9/PFVfPSGow1.json')
-
-# # Header
-# with st.container():
-#     st.subheader('Detecting Misinformation with LLMs')
-#     st.title('Labeling Misinformation from Reddit Responses')
-#     st.write('Thanks for taking the time to label whether responses to medical questions on Reddit are misinformation or not.')
-#     st.write('[Learn More About the Lab and Team >](https://www.daneshjoulab.com/)')
-
-# with st.container():
-#     st.write('---')
-#     left_column, right_column = st.columns(2)
-#     with left_column:
-#         st.header('What we plan on doing:')
-#         st.write('##')
-#         st.write(
-#             """
-#             Phase 1: 
-#             - Analyzing Base GPT and LLAMA2
-#             - Extracting and parsing layers of Reddit Q&As regarding biomedicine.
-
-#             Phase 2:
-#             - Train LLAMA2 with human preference standards with reinforcement learning.
-#             - Build code to evaluate Reddit
-#             - Use Likert Scale to evaluate Reddit responses
-#             """
-#         )
-#     with right_column:
-#         st_lottie(lottie_coding, height=300, key='coding')
-
-# with st.container():
-#     st.title('Evaluate')
-
-#     # Create a list of image paths (replace with actual image file paths)
-#     # "image1.jpg", "image2.jpg", "image3.jpg", "image4.jpg"
-#     image_paths = []
-
-#     # Display images with incremental labels
-#     for i, image_path in enumerate(image_paths):
-#         st.image(image_path, caption=f"Image {i + 1}")
-#         st.text("")  # Add some space between images
-
-#     userID = st.text_input('Your UserID', value="", max_chars=None, key=None, type="default", help=None, autocomplete=None, on_change=None, args=None, kwargs=None, placeholder=None, disabled=False, label_visibility="visible")
-#     threadID = st.text_input('Reddit Thread ID', value="", max_chars=None, key=None, type="default", help=None, autocomplete=None, on_change=None, args=None, kwargs=None, placeholder=None, disabled=False, label_visibility="visible")
-#     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;justify-content: center;} </style>', unsafe_allow_html=True)
-#     choose1 = st.radio("To the best of your knowledge is this truthful?",("NA","Strongly Disagree","Disagree", "Neutral", "Agree", "Strongly Agree"))
-#     choose2 = st.radio("If false how harmful would this information be?",("NA","Strongly Disagree","Disagree", "Neutral", "Agree", "Strongly Agree"))
-#     choose3 = st.radio("Does this information come from supported information (opt)?",("NA","Strongly Disagree","Disagree", "Neutral", "Agree", "Strongly Agree"))
-#     choose4 = st.radio("Does this response answer the initial question?",("NA","Strongly Disagree","Disagree", "Neutral", "Agree", "Strongly Agree"))
-#     choose5 = st.radio("Does response show evidence of reasoning?",("NA","Strongly Disagree","Disagree", "Neutral", "Agree", "Strongly Agree"))
-
-#     user_input = {"Username": userID, "Reddit Thread ID": threadID, "Q1": choose1, "Q2": choose2, "Q3": choose3, "Q4": choose4, "Q5": choose5} 
-
-#     key = (userID, threadID)  # Use a tuple as the key
-
-#     if st.button("Submit"):
-#         if user_input:
-#             session_state.set(key, user_input)
-#             st.success(f"Data '{user_input}' added to the session with key {key}.")
-
-#     delete_options = list(session_state._state.keys())  # Get the keys for delete options
-#     delete_options.insert(0, 'None')  # Add 'None' as the default option
-#     delete_key = st.selectbox("Select data to delete:", delete_options)
-#     if delete_key != 'None':
-#         session_state.delete(delete_key)
-#         st.success(f"Data with key {delete_key} deleted from the session.")
-
-#     # Display the session data
-#     st.write("Session Data:")
-#     if session_state._state:
-#         for key, data in session_state._state.items():
-#             st.write(f"Key: {key}, Data: {data}")
-
-#     # User input for file destination (directory path)
-#     st.write('For Windows: "C:\\Users\\YourUsername\\Documents\\"')
-#     st.write('For macOS or Linux: "/Users/YourUsername/Documents/"')
-#     file_destination = st.text_input("Enter the Directory Path to Save CSV File", "/path/to/directory")
-
-#     # Export session data to a local CSV file in the specified directory
-#     if st.button("Export CSV Locally"):
-#         if session_state._state:
-#             data_list = [data for data in session_state._state.values()]
-#             df = pd.DataFrame(data_list, columns=["Username", "Reddit Thread ID", "Q1", "Q2", "Q3", "Q4", "Q5"])
-            
-#             if file_destination:
-#                 destination_path = os.path.join(file_destination, "user_data.csv")
-#                 df.to_csv(destination_path, index=False)
-#                 st.success(f"Data exported to {destination_path}")
-#             else:
-#                 st.warning("Please specify a directory path to save the CSV file.")
-#         else:
-#             st.warning("No data to export.")
-
-#     st.write('Please email the exported csv to: minhle19@stanford.edu')
-#     st.write('Thank you for your time!')
-# uploaded_file = st.sidebar.file_uploader("Choose a JSON file or use the default", type="json")
-# #HERE is where my code starts
-
-
-
-
-# st.markdown("<br><br><br><br><br><br><br>", unsafe_allow_html=True)
-
-
-
-# data = None
-# while data is None:
-#     if uploaded_file is not None:
-#         data = json.load(uploaded_file)
-#     else:
-#         try:
-#             with open('reddit_dummy_data.json') as f:
-#                 data = json.load(f)
-#         except FileNotFoundError:
-#             st.error('Default file not found. Please upload a file.')
-#             continue
-# def display_comment(comment, depth=0):
-#     indent = "----" * depth
-#     # st.write(f"depth:{depth}{indent}- {comment['body']}")
-    
-#     st.write(f"depth:{comment['depth']} id: {comment['id']}")
-# # Display HTML conten
-#     st.markdown(comment['body_html'], unsafe_allow_html=True)
-#     if 'replies' in comment:
-#         for reply in comment['replies']:
-#             display_comment(reply, depth + 1)
-# # Create a list of subreddit names
-# subreddits = list(data.keys())
-
-# # Create a sidebar for subreddit selection
-# subreddit = st.sidebar.selectbox('Choose a subreddit', subreddits)
-
-# # Display the selected subreddit
-# st.title(f'Selected subreddit: {subreddit}')
-
-# # Get the posts from the selected subreddit
-# posts = data[subreddit]
-
-# # Create a list of post ids
-# post_ids = [post['id'] for post in posts]
-
-# # Create a sidebar for post selection
-# post_id = st.sidebar.selectbox('Choose a post', post_ids)
-
-# # Get the selected post
-# post = next(post for post in posts if post['id'] == post_id)
-# print(post)
-# # Display the selected post
-# st.subheader('Selected post:')
-# st.write(post['selftext'])
-
-# # Get the comments from the selected post using the get_comments function from utils.py
-# comments = get_comments(data, subreddit, post_id)
-# # you need to finish this code.
-
-# ## need to fix this and then move onto building. 
-# # Display the comments
-# st.subheader('Comments:')
-# for comment in comments:
-#     display_comment(comment)
