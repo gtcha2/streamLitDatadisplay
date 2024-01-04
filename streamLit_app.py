@@ -220,21 +220,24 @@ def preprocess_json_data(data):
 
     return new_data
 
-def load_random_post(selected_subreddit, userID, include_images):
+def load_random_post(selected_subreddit, userID, filter_option):
     if selected_subreddit in data:
         all_posts = data[selected_subreddit]
         if all_posts:
-            valid_posts = [
-                post for post in all_posts
-                if (include_images or ('thumbnail' in post and (post['thumbnail'] == "self" or post['thumbnail'] == "null")))
-                and post.get('comments') != "[Removed]"
-                and post.get('comments') and not all(comment['author'] == 'AutoModerator' or comment['author'] == 'None' for comment in post['comments'])
-                and (userID, post.get('id'), post.get('comment_index')) not in session_state._state
-            ]
+            valid_posts = []
+            for post in all_posts:
+                has_image = 'thumbnail' in post and post['thumbnail'] not in ["self", "null", "default"]
+                
+                if filter_option == 'All Posts' or \
+                   (filter_option == 'Only Posts With Images' and has_image) or \
+                   (filter_option == 'Only Posts Without Images' and not has_image):
+                    valid_posts.append(post)
+
             if valid_posts:
                 random_post = random.choice(valid_posts)
                 return random_post
     return None
+
 
 def load_post_by_id(data, selected_subreddit, postID, commentID):
     if selected_subreddit in data:
@@ -319,7 +322,11 @@ with st.container():
             data = preprocess_json_data(data)
         
         
-        include_posts_without_images = st.sidebar.checkbox("Include posts without images", value=True)
+        image_filter_option = st.sidebar.radio(
+            "Filter posts by image availability:",
+            ('All Posts', 'Only Posts With Images', 'Only Posts Without Images')
+        )
+
         # Create a Streamlit dropdown menu for subreddit selection
         selected_subreddit = st.sidebar.selectbox("Select a Subreddit", list(data.keys()))
 
@@ -328,7 +335,7 @@ with st.container():
                 st.session_state.random_post = None
 
             # Load a new random post and store it in the session state
-            st.session_state.random_post = load_random_post(selected_subreddit, userID,include_posts_without_images)
+            st.session_state.random_post = load_random_post(selected_subreddit, userID,image_filter_option)
 
         # Get the updated random_post
         random_post = st.session_state.random_post
