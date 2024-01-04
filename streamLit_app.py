@@ -308,6 +308,7 @@ with st.container():
     # Sidebar input fields
     st.write(
         """
+        
         On the left, grab a subreddit from those listed below.
         - DermatologyQuestions
         - Skin
@@ -316,6 +317,7 @@ with st.container():
         - Popping
         - Hair
         - SkincareAddicts
+        
         """
     )
 
