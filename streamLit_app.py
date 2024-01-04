@@ -319,9 +319,10 @@ with st.container():
         """
     )
 
-    st.sidebar.write("Workflow: Enter UserID and press enter")
-    st.sidebar.write("select a Subreddit, click 'Load Post") 
-    st.sidebar.write("  evaluate post using Likert Scale, click 'Submit'.")              
+    st.sidebar.write("Workflow:")
+    st.sidebar.write("Enter UserID and press ENTER")
+    st.sidebar.write("Select a Subreddit, click 'Load Post") 
+    st.sidebar.write("Evaluate post using Likert Scale, click 'Submit'.")              
     st.sidebar.write("Either change the Subreddit or keep it the same and click 'Load Post' for the next post. ")
     st.sidebar.write("Feel free to edit previous evaluations, which will update the Google Sheets, or delete previous evaluations, which will remove the evaluation from Google Sheets.")
     userID = st.sidebar.text_input('Your UserID', value="", max_chars=None, key=None, type="default", help=None, autocomplete=None, on_change=None, args=None, kwargs=None, placeholder=None, disabled=False, label_visibility="visible")
