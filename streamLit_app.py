@@ -70,6 +70,7 @@ gc = gspread.service_account_from_dict(secrets_dict)
 sheet_url = 'https://docs.google.com/spreadsheets/d/1Srh7lQffIXZQEJA0eBImE9LiTf0lJWZ-cvKuaDmqI7Y/edit'
 
 # Define CSS for styling your app
+
 css = """
 <style>
 .container {
@@ -95,6 +96,18 @@ h2 {
     color: #e74c3c;
     font-size: 18px;
 }
+/* Target the direct children div of class .stRadio that contains the radio button inputs and labels */
+        div.stRadio > div {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            /* Prevent wrapping of label text */
+            white-space: nowrap;
+        }
+        /* Target the label elements within the .stRadio divs to give them more space */
+        div.stRadio > div > label {
+            margin-right: 1em; /* Adjust this value as needed to fit your layout */
+        }
 </style>
 """
 
