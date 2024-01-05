@@ -247,17 +247,30 @@ def load_random_post(selected_subreddit, userID, filter_option):
         if all_posts:
             valid_posts = []
             for post in all_posts:
+                # Check for image availability based on the filter option
                 has_image = 'thumbnail' in post and post['thumbnail'] not in ["self", "null", "default"]
                 
-                if filter_option == 'All Posts' or \
-                   (filter_option == 'Only Posts With Images' and has_image) or \
-                   (filter_option == 'Only Posts Without Images' and not has_image):
+                # Check if comments are not "[Removed]" and filter specific authors
+                has_valid_comments = (post.get('comments') != "[Removed]" and 
+                                      post.get('comments') and 
+                                      not all(comment['author'] == 'AutoModerator' or comment['author'] == 'None' for comment in post['comments']))
+                
+                # Check if the post has not been seen by the user
+                is_unseen = (userID, post.get('id'), post.get('comment_index')) not in session_state._state
+                
+                # Apply filters based on the filter_option and other conditions
+                if ((filter_option == 'All Posts' or
+                     (filter_option == 'Only Posts With Images' and has_image) or
+                     (filter_option == 'Only Posts Without Images' and not has_image)) and
+                    has_valid_comments and is_unseen):
+                    
                     valid_posts.append(post)
 
             if valid_posts:
                 random_post = random.choice(valid_posts)
                 return random_post
     return None
+
 
 
 def load_post_by_id(data, selected_subreddit, postID, commentID):
