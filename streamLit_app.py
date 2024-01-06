@@ -270,6 +270,8 @@ def load_random_post(selected_subreddit, userID, filter_option):
             if valid_posts:
                 random_post = random.choice(valid_posts)
                 return random_post
+            else:
+                return None
     return None
 
 
