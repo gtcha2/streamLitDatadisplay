@@ -256,7 +256,7 @@ def load_random_post(selected_subreddit, userID, filter_option):
                                       not all(comment['author'] == 'AutoModerator' or comment['author'] == 'None' for comment in post['comments']))
                 
                 # Check if the post has not been seen by the user
-                is_unseen = (userID, post.get('id'), post.get('comment_index')) not in session_state._state
+                is_unseen = (userID, post.get('id'), post.get('comment_index')) not in session_state._state.keys()
                 
                 # Apply filters based on the filter_option and other conditions
                 if ((filter_option == 'All Posts' or
@@ -428,7 +428,7 @@ with st.container():
                 choose5 = st.radio("Does the response show evidence of reasoning?", choices)
 
                 user_input = {"Username": userID, "Reddit Post ID": postID, "Comment ID": commentID, "Q1": choose1, "Q2": choose2, "Q3": choose3, "Q4": choose4, "Q5": choose5}
-
+                
                 key = (userID, postID, commentID)  # Use a tuple as the key
 
                 if st.button("Submit"):
@@ -436,6 +436,7 @@ with st.container():
                         session_state.set(key, user_input)
                         update_or_append_data(gc, sheet_url, user_input, action='update')  # Update Google Sheets on every submission
                         st.success(f"Data '{user_input}' added to the session with key {key}")
+                        
 
                 delete_options = list(session_state._state.keys())  # Get the keys for delete options
                 delete_options.insert(0, 'None')  # Add 'None' as the default option
