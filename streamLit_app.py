@@ -257,9 +257,7 @@ def load_random_post(selected_subreddit, userID, filter_option):
                 
                 # Check if the post has not been seen by the user
                 is_unseen = (userID, post.get('id'), str(post.get('comment_index'))) not in session_state._state.keys()
-                st.write("testing here")
-                st.write(str((userID, post.get('id'), post.get('comment_index'))))
-                st.write((userID, post.get('id'), str(post.get('comment_index'))) not in session_state._state.keys())
+               
                 # Apply filters based on the filter_option and other conditions
                 if ((filter_option == 'All Posts' or
                      (filter_option == 'Only Posts With Images' and has_image) or
