@@ -9,8 +9,7 @@ from googleapiclient.discovery import build
 # what else needs to be completed. 
 # i need to set up the login page. 
 st.set_page_config(page_title='Label Medical Misinformation', page_icon=':face_with_thermometer:', layout='wide')
-st.write(str(st.session_state.data.keys()))
-st.write("testing")
+
 # Initialize Google Sheets with service account credentials
 # gc = gspread.service_account(filename='llms-for-misinformation-196fdd9cebe7.json')
 os.environ["reddit_data"]="reddit_dummy_data.json"
