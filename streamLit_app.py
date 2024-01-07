@@ -532,4 +532,7 @@ with st.container():
                             st.success(f"Edits saved for data '{edited_data_edit}' with key {edit_key}")
 
                 else:
+                    
                     st.warning("No data selected for editing")
+        else: 
+            st.write("No more posts in this subreddit")
