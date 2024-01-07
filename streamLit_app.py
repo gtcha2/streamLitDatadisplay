@@ -210,7 +210,7 @@ def load_previous_evaluations(gc, sheet_url, userID):
             q5 = row[7]
             full_eval = {"Username": userID, "Reddit Post ID": postID, "Comment ID": commentID, "Q1": q1, "Q2": q2, "Q3": q3, "Q4": q4, "Q5": q5}
             evaluations.append(((userID, postID, commentID), full_eval))
-
+    
     return evaluations
 
 def preprocess_json_data(data):
@@ -240,7 +240,28 @@ def preprocess_json_data(data):
                     new_data[subreddit].append(new_post)
 
     return new_data
+def compareCounts(evals,data,subreddit,user_id):
+    # evals are in formof 
+    result = []
+    comparison=[]
+    all_posts = data[subreddit]
+    seen = set()
+    for d in all_posts:
+        identifier = (d['comment_index'], d['id'])
+        if identifier not in seen:
+            seen.add(identifier)
+            result.append(d)
+            comparison.append((user_id, d["id"], str(d['comment_index'])))
+    
+    # Initialize a counter
+    matching_keys_count = 0
 
+# Iterate through list1 and check each key against list2
+    for key, _ in evals:
+        if key in comparison:
+             matching_keys_count += 1
+    
+    return matching_keys_count
 def load_random_post(selected_subreddit, userID, filter_option):
     if selected_subreddit in data:
         all_posts = data[selected_subreddit]
@@ -271,7 +292,7 @@ def load_random_post(selected_subreddit, userID, filter_option):
                      (filter_option == 'Only Posts Without Images' and not has_image)) and
                     has_valid_comments and not is_unseen):
                     evaluated_post.append(post)
-            session_state.set("current_subreddit_eval",len(evaluated_post))
+            
             if valid_posts:
                 random_post = random.choice(valid_posts)
                 return random_post
@@ -357,7 +378,9 @@ with st.container():
         user_evaluations = load_previous_evaluations(gc, sheet_url, userID)
 
         # Add the user's previous evaluations to the session state
+        
         for evaluations in user_evaluations:
+            
             if evaluations[0] not in session_state._state:
                 session_state.set(evaluations[0], evaluations[1])
 
@@ -389,10 +412,10 @@ with st.container():
 
             # Load a new random post and store it in the session state
             st.session_state.random_post = load_random_post(selected_subreddit, userID,image_filter_option)
-        evalCount=session_state.get("current_subreddit_eval") if "current_subreddit_eval" in st.session_state else 0
+        evalCount=compareCounts(user_evaluations,data,selected_subreddit,userID)
         # Get the updated random_post
         random_post = st.session_state.random_post
-        st.write("current subreddit eval count:"+str(evalCount))
+        st.write("current subreddit eval count: "+str(evalCount))
         if random_post:
             # Create two columns for post and evaluation side-by-side
             col1, col2 = st.columns([9, 13])
