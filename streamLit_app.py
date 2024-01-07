@@ -385,10 +385,11 @@ with st.container():
         if st.sidebar.button("Load Post"):
             if "random_post" not in st.session_state:
                 st.session_state.random_post = None
+                
 
             # Load a new random post and store it in the session state
             st.session_state.random_post = load_random_post(selected_subreddit, userID,image_filter_option)
-            evalCount=session_state.get("current_subreddit_eval")
+        evalCount=session_state.get("current_subreddit_eval") if "current_subreddit_eval" in st.session_state else 0
         # Get the updated random_post
         random_post = st.session_state.random_post
         st.write("current subreddit eval count:"+str(evalCount))
