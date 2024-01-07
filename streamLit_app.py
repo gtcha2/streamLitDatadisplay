@@ -270,7 +270,7 @@ def load_random_post(selected_subreddit, userID, filter_option):
                      (filter_option == 'Only Posts With Images' and has_image) or
                      (filter_option == 'Only Posts Without Images' and not has_image)) and
                     has_valid_comments and not is_unseen):
-                    evaluated_post.append[post]
+                    evaluated_post.append(post)
             session_state.set("current_subreddit_eval",len(evaluated_post))
             if valid_posts:
                 random_post = random.choice(valid_posts)
