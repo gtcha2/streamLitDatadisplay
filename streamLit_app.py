@@ -246,6 +246,7 @@ def load_random_post(selected_subreddit, userID, filter_option):
         all_posts = data[selected_subreddit]
         if all_posts:
             valid_posts = []
+            evaluated_post = []
             for post in all_posts:
                 # Check for image availability based on the filter option
                 has_image = 'thumbnail' in post and post['thumbnail'] not in ["self", "null", "default"]
@@ -265,7 +266,12 @@ def load_random_post(selected_subreddit, userID, filter_option):
                     has_valid_comments and is_unseen):
                     
                     valid_posts.append(post)
-
+                elif((filter_option == 'All Posts' or
+                     (filter_option == 'Only Posts With Images' and has_image) or
+                     (filter_option == 'Only Posts Without Images' and not has_image)) and
+                    has_valid_comments and not is_unseen):
+                    evaluated_post.append[post]
+            session_state.set("current_subreddit_eval",len(evaluated_post))
             if valid_posts:
                 random_post = random.choice(valid_posts)
                 return random_post
@@ -382,10 +388,10 @@ with st.container():
 
             # Load a new random post and store it in the session state
             st.session_state.random_post = load_random_post(selected_subreddit, userID,image_filter_option)
-
+            evalCount=session_state.get("current_subreddit_eval")
         # Get the updated random_post
         random_post = st.session_state.random_post
-
+        st.write("current subreddit eval count:"+str(evalCount))
         if random_post:
             # Create two columns for post and evaluation side-by-side
             col1, col2 = st.columns([9, 13])
