@@ -535,4 +535,4 @@ with st.container():
                     
                     st.warning("No data selected for editing")
         else: 
-            st.write("No more posts in this subreddit")
+            st.header("No more posts in this subreddit")
