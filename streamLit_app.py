@@ -534,5 +534,7 @@ with st.container():
                 else:
                     
                     st.warning("No data selected for editing")
-        else: 
+        else:
+            
             st.header("No more posts in this subreddit")
+            st.warning("No more posts for this subreddit, reload")
