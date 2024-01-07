@@ -241,7 +241,7 @@ def preprocess_json_data(data):
 
     return new_data
 def compareCounts(evals,data,subreddit,user_id):
-    st.alert("arrived here")
+    st.warning("arrived here")
     # evals are in formof 
     result = []
     comparison=[]
@@ -261,7 +261,7 @@ def compareCounts(evals,data,subreddit,user_id):
     for key, _ in evals:
         if key in comparison:
              matching_keys_count += 1
-    st.alert(matching_keys_count)
+    st.warning(matching_keys_count)
     return matching_keys_count
 def load_random_post(selected_subreddit, userID, filter_option):
     if selected_subreddit in data:
