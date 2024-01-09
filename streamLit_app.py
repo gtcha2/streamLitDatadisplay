@@ -293,6 +293,7 @@ def load_random_post(selected_subreddit, userID, filter_option):
               
             
             if valid_posts:
+                st.warning("you have "+ str(len(valid_posts))+" left in this subreddit for this filter")
                 random_post = random.choice(valid_posts)
                 return random_post
             else:
