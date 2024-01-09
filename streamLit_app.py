@@ -267,8 +267,9 @@ def load_random_post(selected_subreddit, userID, filter_option):
     if selected_subreddit in data:
         all_posts = data[selected_subreddit]
         if all_posts:
+            validSet=set()
             valid_posts = []
-            evaluated_post = []
+            
             for post in all_posts:
                 # Check for image availability based on the filter option
                 has_image = 'thumbnail' in post and post['thumbnail'] not in ["self", "null", "default"]
@@ -286,13 +287,10 @@ def load_random_post(selected_subreddit, userID, filter_option):
                      (filter_option == 'Only Posts With Images' and has_image) or
                      (filter_option == 'Only Posts Without Images' and not has_image)) and
                     has_valid_comments and is_unseen):
-                    
-                    valid_posts.append(post)
-                elif((filter_option == 'All Posts' or
-                     (filter_option == 'Only Posts With Images' and has_image) or
-                     (filter_option == 'Only Posts Without Images' and not has_image)) and
-                    has_valid_comments and not is_unseen):
-                    evaluated_post.append(post)
+                    if (post.get('id'), str(post.get('comment_index'))) not in validSet:
+                        validSet.add((post.get('id'), str(post.get('comment_index'))))
+                        valid_posts.append(post)
+              
             
             if valid_posts:
                 random_post = random.choice(valid_posts)
