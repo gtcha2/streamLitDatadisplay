@@ -12,7 +12,7 @@ st.set_page_config(page_title='Label Medical Misinformation', page_icon=':face_w
 
 # Initialize Google Sheets with service account credentials
 # gc = gspread.service_account(filename='llms-for-misinformation-196fdd9cebe7.json')
-os.environ["reddit_data"]="reddit_dummy_data.json"
+# os.environ["reddit_data"]="reddit_dummy_data.json"
 secrets_dict = {
     "type": st.secrets["type"],
     "project_id": st.secrets["project_id"],
