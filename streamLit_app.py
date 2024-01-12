@@ -426,6 +426,16 @@ with st.container():
         """
     )
 
+    st.write("")  # Add a blank line for space
+    st.write("")  # Add a blank line for space
+    st.write("")  # Add a blank line for space
+    st.title("Generated Post")
+    st.write("")  # Add a blank line for space
+    
+    # Create a button to reset the page
+    if st.sidebar.button("Reset Page"):
+        st.experimental_rerun()
+
     st.sidebar.write("Workflow:")
     st.sidebar.write("Enter UserID and press ENTER")
     st.sidebar.write("Select a Subreddit, click 'Load Post") 
