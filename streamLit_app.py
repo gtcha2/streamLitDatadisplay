@@ -315,7 +315,7 @@ def compareCounts(evals,data,subreddit,user_id):
         if identifier not in seen:
             seen.add(identifier)
             result.append(d)
-            comparison.append((user_id, d["id"], str(d['comment_index'])))
+            comparison.append((user_id, d['subreddit'], d["id"], str(d['comment_index'])))
     
     # Initialize a counter
     matching_keys_count = 0
