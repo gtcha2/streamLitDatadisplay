@@ -344,7 +344,7 @@ def load_random_post(selected_subreddit, userID, filter_option):
                                       not all(comment['author'] == 'AutoModerator' or comment['author'] == 'None' for comment in post['comments']))
                 
                 # Check if the post has not been seen by the user
-                is_unseen = (userID, post.get('id'), str(post.get('comment_index'))) not in session_state._state.keys()
+                is_unseen = (userID, post.get('subreddit'), post.get('id'), str(post.get('comment_index'))) not in session_state._state.keys()
                
                 # Apply filters based on the filter_option and other conditions
                 if ((filter_option == 'All Posts' or
