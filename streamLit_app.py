@@ -460,9 +460,9 @@ with st.container():
         with open(os.environ["reddit_data"], 'r') as json_file:
             data = json.load(json_file)
             data = preprocess_json_data(data)
-            for key in data.keys():
-                if key == 'SkincareAddictions':
-                    del data[key]
+            # for key in data.keys():
+            #     if key == 'SkincareAddictions':
+            #         del data[key]
         
         image_filter_option = st.sidebar.radio(
             "Filter posts by image availability:",
