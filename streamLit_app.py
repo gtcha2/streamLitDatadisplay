@@ -461,7 +461,7 @@ with st.container():
             data = json.load(json_file)
             data = preprocess_json_data(data)
             for key in data.keys():
-                if data.get(key) == None or key == 'SkincareAddictions':
+                if key == 'SkincareAddictions':
                     del data[key]
         
         image_filter_option = st.sidebar.radio(
