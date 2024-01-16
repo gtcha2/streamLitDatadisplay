@@ -169,7 +169,7 @@ def update_or_append_data(gc, sheet_url, user_input, action):
     # Find the index (row) of the matching userID and postID
     found_index = -1
     for i, row in enumerate(values):
-        if len(row) >= 2 and row[0] == user_input["Username"] and row[1] == user_input["Subreddit"] and row[2] == user_input["Reddit Post ID"] and row[3] == user_input["Comment ID"]:
+        if len(row) >= 2 and row[0] == user_input["Username"] and row[1] == user_input["Subreddit"] and row[2] == user_input["Reddit Post ID"] and str(row[3]) == str(user_input["Comment ID"]):
             found_index = i
             break
 
