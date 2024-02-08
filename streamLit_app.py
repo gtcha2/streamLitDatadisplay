@@ -175,7 +175,7 @@ def update_or_append_data(gc, sheet_url, user_input, action):
 
     if action == 'update' and found_index != -1:
         # Update the existing row with the new data
-        worksheet.update(f"A{found_index + 1}:I{found_index + 1}", [list(user_input.values())])
+        worksheet.update(f"A{found_index + 1}:J{found_index + 1}", [list(user_input.values())])
         st.success("Data updated in Google Sheets.")
     elif action == 'delete':
         # Delete the row from the worksheet
