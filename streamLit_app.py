@@ -377,6 +377,10 @@ def load_post_by_id(data, selected_subreddit, postID, commentID):
     return None
 
 def choose_index(value):
+    choices = ['Yes', 'No', 'Maybe']
+    return choices.index(value) if value in choices else 0
+
+def choose_index_likert(value):
     choices = ["NA", "Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"]
     return choices.index(value) if value in choices else 0
 
@@ -613,12 +617,12 @@ with st.container():
 
                         # Display the previous evaluation for editing
                         st.write("Previous Evaluation:")
-                        choose0_edit = st.radio("__Does this post have an answerable question?__", first_choice, index=choose_index(edited_data["Q0"]))
-                        choose1_edit = st.radio("__To the best of your knowledge is this truthful?__", choices, index=choose_index(edited_data["Q1"]))
-                        choose2_edit = st.radio("__If false how harmful would this information be?__", choices, index=choose_index(edited_data["Q2"]))
-                        choose3_edit = st.radio("__Does this information come from supported information?__", choices, index=choose_index(edited_data["Q3"]))
-                        choose4_edit = st.radio("__Does this response answer the initial question?__", choices, index=choose_index(edited_data["Q4"]))
-                        choose5_edit = st.radio("__Does response show evidence of reasoning?__", choices, index=choose_index(edited_data["Q5"]))
+                        choose0_edit = st.radio("__Does this post have an answerable question?__", first_choice, index=choose_index(edited_data["Q0"]), key="choose0_edit")
+                        choose1_edit = st.radio("__To the best of your knowledge is this truthful?__", choices, index=choose_index_likert(edited_data["Q1"]), key="choose1_edit")
+                        choose2_edit = st.radio("__If false how harmful would this information be?__", choices, index=choose_index_likert(edited_data["Q2"]), key="choose2_edit")
+                        choose3_edit = st.radio("__Does this information come from supported information?__", choices, index=choose_index_likert(edited_data["Q3"]), key="choose3_edit")
+                        choose4_edit = st.radio("__Does this response answer the initial question?__", choices, index=choose_index_likert(edited_data["Q4"]), key="choose4_edit")
+                        choose5_edit = st.radio("__Does response show evidence of reasoning?__", choices, index=choose_index_likert(edited_data["Q5"]), key="choose5_edit")
 
                         edited_data_edit = {
                             "Username": edited_data["Username"],
