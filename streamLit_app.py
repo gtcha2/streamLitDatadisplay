@@ -521,12 +521,13 @@ with st.container():
                     display_comments(comment, level=0, parent_comment_author=random_post.get('author'))
 
             with col2:
+                first_choice = ['Yes', 'No', 'Maybe']
                 choices = ["NA", "Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"]
                 postID = st.text_input('Reddit Post ID', value=random_post.get('id'), max_chars=None, key=None, type="default", help=None, autocomplete=None, on_change=None, args=None, kwargs=None, placeholder=None, disabled=False, label_visibility="visible")
                 commentID = st.text_input('Comment ID', value=random_post.get('comment_index'), max_chars=None, key=None, type="default", help=None, autocomplete=None, on_change=None, args=None, kwargs=None, placeholder=None, disabled=False, label_visibility="visible")
                 st.write('<style>div.row-widget.stRadio > div{flex-direction:row;justify-content: center;} </style>', unsafe_allow_html=True)
 
-                choose0 = st.radio("__Does this post have an answerable question?__", ['Yes', 'No', 'Maybe'])
+                choose0 = st.radio("__Does this post have an answerable question?__", first_choice)
                 choose1 = st.radio("To the best of your knowledge is this truthful?", choices)
                 choose2 = st.radio("Is the answer to the information harmful?", choices)
                 choose3 = st.radio("Does this response come from supported information?", choices)
@@ -612,7 +613,7 @@ with st.container():
 
                         # Display the previous evaluation for editing
                         st.write("Previous Evaluation:")
-                        choose0_edit = st.radio("__Does this post have an answerable question?__", ['Yes', 'No', 'Maybe'], index=choose_index(edited_data["Q0"]))
+                        choose0_edit = st.radio("__Does this post have an answerable question?__", first_choice, index=choose_index(edited_data["Q0"]))
                         choose1_edit = st.radio("__To the best of your knowledge is this truthful?__", choices, index=choose_index(edited_data["Q1"]))
                         choose2_edit = st.radio("__If false how harmful would this information be?__", choices, index=choose_index(edited_data["Q2"]))
                         choose3_edit = st.radio("__Does this information come from supported information?__", choices, index=choose_index(edited_data["Q3"]))
