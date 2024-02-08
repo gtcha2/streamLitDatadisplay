@@ -204,12 +204,13 @@ def load_previous_evaluations(gc, sheet_url, userID):
             subreddit = row[1]
             postID = row[2]
             commentID = row[3]
-            q1 = row[4]
-            q2 = row[5]
-            q3 = row[6]
-            q4 = row[7]
-            q5 = row[8]
-            full_eval = {"Username": userID, "Subreddit": subreddit, "Reddit Post ID": postID, "Comment ID": commentID, "Q1": q1, "Q2": q2, "Q3": q3, "Q4": q4, "Q5": q5}
+            q0 = row[4]
+            q1 = row[5]
+            q2 = row[6]
+            q3 = row[7]
+            q4 = row[8]
+            q5 = row[9]
+            full_eval = {"Username": userID, "Subreddit": subreddit, "Reddit Post ID": postID, "Comment ID": commentID, "Q0": q0, "Q1": q1, "Q2": q2, "Q3": q3, "Q4": q4, "Q5": q5}
             evaluations.append(((userID, subreddit, postID, commentID), full_eval))
 
     return evaluations
@@ -524,14 +525,15 @@ with st.container():
                 postID = st.text_input('Reddit Post ID', value=random_post.get('id'), max_chars=None, key=None, type="default", help=None, autocomplete=None, on_change=None, args=None, kwargs=None, placeholder=None, disabled=False, label_visibility="visible")
                 commentID = st.text_input('Comment ID', value=random_post.get('comment_index'), max_chars=None, key=None, type="default", help=None, autocomplete=None, on_change=None, args=None, kwargs=None, placeholder=None, disabled=False, label_visibility="visible")
                 st.write('<style>div.row-widget.stRadio > div{flex-direction:row;justify-content: center;} </style>', unsafe_allow_html=True)
-                
+
+                choose0 = st.radio("__Does this post have an answerable question?__", ['Yes', 'No', 'Maybe'])
                 choose1 = st.radio("To the best of your knowledge is this truthful?", choices)
                 choose2 = st.radio("Is the answer to the information harmful?", choices)
                 choose3 = st.radio("Does this response come from supported information?", choices)
                 choose4 = st.radio("Does this response answer the initial question?", choices)
                 choose5 = st.radio("Does the response show evidence of reasoning?", choices)
 
-                user_input = {"Username": userID, "Subreddit": selected_subreddit, "Reddit Post ID": postID, "Comment ID": commentID, "Q1": choose1, "Q2": choose2, "Q3": choose3, "Q4": choose4, "Q5": choose5}
+                user_input = {"Username": userID, "Subreddit": selected_subreddit, "Reddit Post ID": postID, "Comment ID": commentID, "Q0": choose0, "Q1": choose1, "Q2": choose2, "Q3": choose3, "Q4": choose4, "Q5": choose5}
                 
                 key = (userID, selected_subreddit, postID, commentID)  # Use a tuple as the key
 
@@ -610,17 +612,19 @@ with st.container():
 
                         # Display the previous evaluation for editing
                         st.write("Previous Evaluation:")
-                        choose1_edit = st.radio("To the best of your knowledge is this truthful?", choices, index=choose_index(edited_data["Q1"]))
-                        choose2_edit = st.radio("If false how harmful would this information be?", choices, index=choose_index(edited_data["Q2"]))
-                        choose3_edit = st.radio("Does this information come from supported information?", choices, index=choose_index(edited_data["Q3"]))
-                        choose4_edit = st.radio("Does this response answer the initial question?", choices, index=choose_index(edited_data["Q4"]))
-                        choose5_edit = st.radio("Does response show evidence of reasoning?", choices, index=choose_index(edited_data["Q5"]))
+                        choose0_edit = st.radio("__Does this post have an answerable question?__", ['Yes', 'No', 'Maybe'], index=choose_index(edited_data["Q0"]), key="choose0_edit")
+                        choose1_edit = st.radio("__To the best of your knowledge is this truthful?__", choices, index=choose_index(edited_data["Q1"]), key="choose1_edit")
+                        choose2_edit = st.radio("__If false how harmful would this information be?__", choices, index=choose_index(edited_data["Q2"]), key="choose2_edit")
+                        choose3_edit = st.radio("__Does this information come from supported information?__", choices, index=choose_index(edited_data["Q3"]), key="choose3_edit")
+                        choose4_edit = st.radio("__Does this response answer the initial question?__", choices, index=choose_index(edited_data["Q4"]), key="choose4_edit")
+                        choose5_edit = st.radio("__Does response show evidence of reasoning?__", choices, index=choose_index(edited_data["Q5"]), key="choose5_edit")
 
                         edited_data_edit = {
                             "Username": edited_data["Username"],
                             "Subreddit": edited_data["Subreddit"],
                             "Reddit Post ID": postID_edit,
                             "Comment ID": commentID_edit,
+                            "Q0": choose0_edit,
                             "Q1": choose1_edit,
                             "Q2": choose2_edit,
                             "Q3": choose3_edit,
