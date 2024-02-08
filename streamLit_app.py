@@ -612,12 +612,12 @@ with st.container():
 
                         # Display the previous evaluation for editing
                         st.write("Previous Evaluation:")
-                        choose0_edit = st.radio("__Does this post have an answerable question?__", ['Yes', 'No', 'Maybe'], index=choose_index(edited_data["Q0"]), key="choose0_edit")
-                        choose1_edit = st.radio("__To the best of your knowledge is this truthful?__", choices, index=choose_index(edited_data["Q1"]), key="choose1_edit")
-                        choose2_edit = st.radio("__If false how harmful would this information be?__", choices, index=choose_index(edited_data["Q2"]), key="choose2_edit")
-                        choose3_edit = st.radio("__Does this information come from supported information?__", choices, index=choose_index(edited_data["Q3"]), key="choose3_edit")
-                        choose4_edit = st.radio("__Does this response answer the initial question?__", choices, index=choose_index(edited_data["Q4"]), key="choose4_edit")
-                        choose5_edit = st.radio("__Does response show evidence of reasoning?__", choices, index=choose_index(edited_data["Q5"]), key="choose5_edit")
+                        choose0_edit = st.radio("__Does this post have an answerable question?__", ['Yes', 'No', 'Maybe'], index=choose_index(edited_data["Q0"]))
+                        choose1_edit = st.radio("__To the best of your knowledge is this truthful?__", choices, index=choose_index(edited_data["Q1"]))
+                        choose2_edit = st.radio("__If false how harmful would this information be?__", choices, index=choose_index(edited_data["Q2"]))
+                        choose3_edit = st.radio("__Does this information come from supported information?__", choices, index=choose_index(edited_data["Q3"]))
+                        choose4_edit = st.radio("__Does this response answer the initial question?__", choices, index=choose_index(edited_data["Q4"]))
+                        choose5_edit = st.radio("__Does response show evidence of reasoning?__", choices, index=choose_index(edited_data["Q5"]))
 
                         edited_data_edit = {
                             "Username": edited_data["Username"],
