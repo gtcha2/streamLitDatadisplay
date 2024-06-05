@@ -533,8 +533,8 @@ with st.container():
                 st.write('<style>div.row-widget.stRadio > div{flex-direction:row;justify-content: center;} </style>', unsafe_allow_html=True)
 
                 choose0 = st.radio("__Does this post have an answerable question?__", first_choice)
-                choose0.5 = st.radio("Does this post have visible image or working url to image?",post_has_image)
-                choose0.8 = st.text_input("Please note any unique information or errors")
+                chooseImage = st.radio("Does this post have visible image or working url to image?",post_has_image)
+                textNotes = st.text_input("Please note any unique information or errors")
                 choose1 = st.radio("To the best of your knowledge is this truthful?", choices)
                 choose2 = st.radio("Is the answer to the information harmful?", choices)
                 choose3 = st.radio("Does this response come from supported information?", choices)
