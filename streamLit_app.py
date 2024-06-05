@@ -622,6 +622,9 @@ with st.container():
                         # Display the previous evaluation for editing
                         st.write("Previous Evaluation:")
                         choose0_edit = st.radio("__Does this post have an answerable question?__", first_choice, index=choose_index(edited_data["Q0"]), key="choose0_edit")
+                        chooseImage_edit = st.radio("Does this post have visible image or working url to image?",post_has_image)
+                        textNotes_edit = st.text_input("Please note any unique information or errors")
+                        classificationText_edit=st.text_input("Classify what question is pertaining to, ie hygiene management,skincare, diagnostic")
                         choose1_edit = st.radio("__To the best of your knowledge is this truthful?__", choices, index=choose_index_likert(edited_data["Q1"]), key="choose1_edit")
                         choose2_edit = st.radio("__If false how harmful would this information be?__", choices, index=choose_index_likert(edited_data["Q2"]), key="choose2_edit")
                         choose3_edit = st.radio("__Does this information come from supported information?__", choices, index=choose_index_likert(edited_data["Q3"]), key="choose3_edit")
@@ -639,6 +642,7 @@ with st.container():
                             "Q3": choose3_edit,
                             "Q4": choose4_edit,
                             "Q5": choose5_edit,
+                            "chooseImage":chooseImage_edit,"uniqueInformation":textNotes_edit,"classification":classificationText_edit}
                         }
 
                         if st.button("__Save Edits__"):
