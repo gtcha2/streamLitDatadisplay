@@ -399,7 +399,7 @@ with st.container():
     st.write(
         """
         Phase 1: 
-        - Analyzing Base GPT and LLAMA2
+        - Analyzing Base GPT and LLAMA models
         - Extracting and parsing layers of Reddit Q&As regarding biomedicine. 
         - Use Likert Scale to evaluate Reddit responses for humans vs models
 
