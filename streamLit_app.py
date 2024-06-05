@@ -175,7 +175,7 @@ def update_or_append_data(gc, sheet_url, user_input, action):
 
     if action == 'update' and found_index != -1:
         # Update the existing row with the new data
-        worksheet.update(f"A{found_index + 1}:J{found_index + 1}", [list(user_input.values())])
+        worksheet.update(f"A{found_index + 1}:M{found_index + 1}", [list(user_input.values())])
         st.success("Data updated in Google Sheets.")
     elif action == 'delete':
         # Delete the row from the worksheet
@@ -535,13 +535,14 @@ with st.container():
                 choose0 = st.radio("__Does this post have an answerable question?__", first_choice)
                 chooseImage = st.radio("Does this post have visible image or working url to image?",post_has_image)
                 textNotes = st.text_input("Please note any unique information or errors")
-                choose1 = st.radio("To the best of your knowledge is this truthful?", choices)
+                classificationText=st.text_input("Classify what question is pertaining to, ie hygiene management,skincare, diagnostic")
+                choose1 = st.radio("To the best of your knowledge is the answer to the post truthful?", choices)
                 choose2 = st.radio("Is the answer to the information harmful?", choices)
                 choose3 = st.radio("Does this response come from supported information?", choices)
                 choose4 = st.radio("Does this response answer the initial question?", choices)
                 choose5 = st.radio("Does the response show evidence of reasoning?", choices)
                 
-                user_input = {"Username": userID, "Subreddit": selected_subreddit, "Reddit Post ID": postID, "Comment ID": commentID, "Q0": choose0, "Q1": choose1, "Q2": choose2, "Q3": choose3, "Q4": choose4, "Q5": choose5}
+                user_input = {"Username": userID, "Subreddit": selected_subreddit, "Reddit Post ID": postID, "Comment ID": commentID, "Q0": choose0, "Q1": choose1, "Q2": choose2, "Q3": choose3, "Q4": choose4, "Q5": choose5, "chooseImage":chooseImage,"uniqueInformation":textNotes,"classification":classificationText}
                 
                 key = (userID, selected_subreddit, postID, commentID)  # Use a tuple as the key
 
