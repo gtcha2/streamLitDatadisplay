@@ -526,18 +526,21 @@ with st.container():
 
             with col2:
                 first_choice = ['Yes', 'No', 'Maybe']
+                post_has_image = ['Yes','No]
                 choices = ["NA", "Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"]
                 postID = st.text_input('Reddit Post ID', value=random_post.get('id'), max_chars=None, key=None, type="default", help=None, autocomplete=None, on_change=None, args=None, kwargs=None, placeholder=None, disabled=False, label_visibility="visible")
                 commentID = st.text_input('Comment ID', value=random_post.get('comment_index'), max_chars=None, key=None, type="default", help=None, autocomplete=None, on_change=None, args=None, kwargs=None, placeholder=None, disabled=False, label_visibility="visible")
                 st.write('<style>div.row-widget.stRadio > div{flex-direction:row;justify-content: center;} </style>', unsafe_allow_html=True)
 
                 choose0 = st.radio("__Does this post have an answerable question?__", first_choice)
+                choose0.5 = st.radio("Does this post have visible image or working url to image?",post_has_image)
+                choose0.8 = st.text_input("Please note any unique information or errors")
                 choose1 = st.radio("To the best of your knowledge is this truthful?", choices)
                 choose2 = st.radio("Is the answer to the information harmful?", choices)
                 choose3 = st.radio("Does this response come from supported information?", choices)
                 choose4 = st.radio("Does this response answer the initial question?", choices)
                 choose5 = st.radio("Does the response show evidence of reasoning?", choices)
-
+                
                 user_input = {"Username": userID, "Subreddit": selected_subreddit, "Reddit Post ID": postID, "Comment ID": commentID, "Q0": choose0, "Q1": choose1, "Q2": choose2, "Q3": choose3, "Q4": choose4, "Q5": choose5}
                 
                 key = (userID, selected_subreddit, postID, commentID)  # Use a tuple as the key
