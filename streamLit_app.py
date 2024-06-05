@@ -642,7 +642,7 @@ with st.container():
                             "Q3": choose3_edit,
                             "Q4": choose4_edit,
                             "Q5": choose5_edit,
-                            "chooseImage":chooseImage_edit,"uniqueInformation":textNotes_edit,"classification":classificationText_edit}
+                            "chooseImage":chooseImage_edit,"uniqueInformation":textNotes_edit,"classification":classificationText_edit
                         }
 
                         if st.button("__Save Edits__"):
