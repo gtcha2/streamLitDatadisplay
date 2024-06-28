@@ -1,0 +1,6 @@
+streamlitVENV/
+GPT4_outputs_batched/
+GPT4o_outputs_6_20/
+raw/
+.DS_Store
+__pycache__/
