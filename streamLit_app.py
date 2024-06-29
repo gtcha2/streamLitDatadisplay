@@ -422,11 +422,11 @@ def doubleCheckLengths( userID, filter_option):
                 if ((filter_option == 'All Posts' or
                      (filter_option == 'Only Posts With Images' and has_image) or
                      (filter_option == 'Only Posts Without Images' and not has_image)) and
-                    has_valid_comments and is_unseen and has_valid_image ):
+                    has_valid_comments  and has_valid_image ):
                     if (post.get("subreddit"),post.get('id'), str(post.get('comment_index'))) not in validSet:
                         validSet.add((post.get("subreddit"),post.get('id'), str(post.get('comment_index'))))
                         valid_posts.append(post)
-    st.session_state["test"]= len(validSet), len(filteredInformation["SampleID"].unique()),"new"
+    st.session_state["test"]= (len(validSet), len(filteredInformation["SampleID"].unique()),"new")
     return
 def load_post_by_id(data, selected_subreddit, postID, commentID):
     if selected_subreddit in data:
