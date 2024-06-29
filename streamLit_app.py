@@ -307,7 +307,7 @@ def preprocess_json_data(data):
                         'thumbnail_width': post['thumbnail_width'],
                         'has_thumbnail': 1 if post['thumbnail'] not in ["self", "null", "default"] else 0,
                         'SampleID':str(subreddit)+"_"+str(post["id"])+"_"+str(i),
-                        'post_hint' : post.get('post_hint', 'None')
+                        'post_hint':post.get('post_hint', 'None')
                     }
                     new_data[subreddit].append(new_post)
 
