@@ -359,7 +359,7 @@ def load_random_post(selected_subreddit, userID, filter_option):
                     row_dict=row.squeeze().to_dict()
                     has_valid_image = ((row_dict["post_hint"]=="image" and row_dict["status"]=="Exists") or (not has_image))
                 else:
-                    has_valid_image = not has_image 
+                    has_valid_image = True
                 # has_valid_image = (not row.empty and ((row["post_hint"]=="image" and row["status"]=="Exists") or (not has_image)))
                 
                 
@@ -392,7 +392,7 @@ def doubleCheckLengths( userID, filter_option):
         if all_posts:
             for post in all_posts:
                 # Check for image availability based on the filter option
-                has_image = post['has_thumbnail']
+                has_image = post['has_thumbnail'] or post["post_hint"] == 'image'
                 
                 # ok you have to check if has thumbnail..
                 # if yes then you jumpt to see if the same one exists. 
