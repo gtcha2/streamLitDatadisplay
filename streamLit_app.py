@@ -356,7 +356,8 @@ def load_random_post(selected_subreddit, userID, filter_option):
                                       post.get('comments') and 
                                       not all(comment['author'] == 'AutoModerator' or comment['author'] == post.get('author') or comment['author'] == 'None' for comment in post.get('comments')))
                 if not row.empty:
-                    has_valid_image = ((row["post_hint"]=="image" and row["status"]=="Exists") or (not has_image))
+                    row_dict=row.squeeze().to_dict()
+                    has_valid_image = ((row_dict["post_hint"]=="image" and row_dict["status"]=="Exists") or (not has_image))
                 else:
                     has_valid_image = False 
                 # has_valid_image = (not row.empty and ((row["post_hint"]=="image" and row["status"]=="Exists") or (not has_image)))
