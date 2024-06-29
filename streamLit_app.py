@@ -411,7 +411,7 @@ def doubleCheckLengths( userID, filter_option):
                     row_dict=row.squeeze().to_dict()
                     has_valid_image = ( row_dict["status"]=="Exists" or row_dict["has_thumbnail"]==False)
                 else:
-                    has_valid_image = has_valid_comments
+                    has_valid_image = False
                 # has_valid_image = (not row.empty and ((row["post_hint"]=="image" and row["status"]=="Exists") or (not has_image)))
                 
                 
