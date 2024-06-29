@@ -344,6 +344,7 @@ def load_random_post(selected_subreddit, userID, filter_option):
             for post in all_posts:
                 # Check for image availability based on the filter option
                 has_image = post['has_thumbnail']
+                
                 # ok you have to check if has thumbnail..
                 # if yes then you jumpt to see if the same one exists. 
                 row=filteredInformation.loc[filteredInformation['SampleID'] == post["SampleID"]].squeeze()
@@ -354,8 +355,8 @@ def load_random_post(selected_subreddit, userID, filter_option):
                 has_valid_comments = (post.get('comments') != "[Removed]" and 
                                       post.get('comments') and 
                                       not all(comment['author'] == 'AutoModerator' or comment['author'] == post.get('author') or comment['author'] == 'None' for comment in post.get('comments')))
-                has_valid_image = ((row["post_hint"]=="image" and row["status"]=="Exists") or (not has_image))
-                
+                # has_valid_image = ((row["post_hint"]=="image" and row["status"]=="Exists") or (not has_image))
+                print(row["post_hint"])
                 # Check if the post has not been seen by the user
                 is_unseen = (userID, post.get('subreddit'), post.get('id'), str(post.get('comment_index'))) not in session_state._state.keys()
                
@@ -363,7 +364,7 @@ def load_random_post(selected_subreddit, userID, filter_option):
                 if ((filter_option == 'All Posts' or
                      (filter_option == 'Only Posts With Images' and has_image) or
                      (filter_option == 'Only Posts Without Images' and not has_image)) and
-                    has_valid_comments and is_unseen and has_valid_image):
+                    has_valid_comments and is_unseen ):
                     if (post.get('id'), str(post.get('comment_index'))) not in validSet:
                         validSet.add((post.get('id'), str(post.get('comment_index'))))
                         valid_posts.append(post)
