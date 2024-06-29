@@ -408,7 +408,7 @@ def doubleCheckLengths( userID, filter_option):
                     row_dict=row.squeeze().to_dict()
                     has_valid_image = ((row_dict["post_hint"]=="image" and row_dict["status"]=="Exists") or (not has_image))
                 else:
-                    has_valid_image = not has_image 
+                    has_valid_image = True
                 # has_valid_image = (not row.empty and ((row["post_hint"]=="image" and row["status"]=="Exists") or (not has_image)))
                 
                 
