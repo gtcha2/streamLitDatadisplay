@@ -364,7 +364,7 @@ def load_random_post(selected_subreddit, userID, filter_option):
                 if ((filter_option == 'All Posts' or
                      (filter_option == 'Only Posts With Images' and has_image) or
                      (filter_option == 'Only Posts Without Images' and not has_image)) and
-                    has_valid_comments and is_unseen ):
+                    has_valid_comments and is_unseen and has_valid_image ):
                     if (post.get('id'), str(post.get('comment_index'))) not in validSet:
                         validSet.add((post.get('id'), str(post.get('comment_index'))))
                         valid_posts.append(post)
