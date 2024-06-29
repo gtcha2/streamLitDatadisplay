@@ -244,7 +244,8 @@ class JsonData:
                             'thumbnail': post['thumbnail'],
                             'thumbnail_width': post['thumbnail_width'],
                             'has_thumbnail': 1 if post['thumbnail'] not in ["self", "null", "default"] else 0,
-                            'SampleID':str(subreddit)+"_"+str(post["id"])+"_"+str(i)
+                            'SampleID':str(subreddit)+"_"+str(post["id"])+"_"+str(i),
+                            "post_hint":post["post_hint"]
                         }
                         self.new_data[subreddit].append(new_post)
 
@@ -275,7 +276,8 @@ class JsonData:
                             'thumbnail': post['thumbnail'],
                             'thumbnail_width': post['thumbnail_width'],
                             'has_thumbnail': 1 if post['thumbnail'] not in ["self", "null", "default"] else 0,
-                            'SampleID':str(subreddit)+"_"+str(post["id"])+"_"+str(i)
+                            'SampleID':str(subreddit)+"_"+str(post["id"])+"_"+str(i),
+                            "post_hint":post["post_hint"]
                         }
                         self.new_data[subreddit].append(new_post)
 
@@ -304,7 +306,8 @@ def preprocess_json_data(data):
                         'thumbnail': post['thumbnail'],
                         'thumbnail_width': post['thumbnail_width'],
                         'has_thumbnail': 1 if post['thumbnail'] not in ["self", "null", "default"] else 0,
-                        'SampleID':str(subreddit)+"_"+str(post["id"])+"_"+str(i)
+                        'SampleID':str(subreddit)+"_"+str(post["id"])+"_"+str(i),
+                        "post_hint":post["post_hint"]
                     }
                     new_data[subreddit].append(new_post)
 
@@ -384,72 +387,48 @@ def load_random_post(selected_subreddit, userID, filter_option):
             else:
                 return None
     return None
-def doubleCheckLengths(userID, filter_option):
-    validSet = set()
+def doubleCheckLengths( userID, filter_option):
+    validSet=set()
     valid_posts = []
-    total_posts = 0
-    posts_after_image_check = 0
-    posts_after_comment_check = 0
-    posts_after_final_filter = 0
-
-    for subreddit in data:
-        all_posts = data[subreddit]
+    for x in data:
+        all_posts = data[x]
         if all_posts:
-            total_posts += len(all_posts)
             for post in all_posts:
-                # Check for image availability
+                # Check for image availability based on the filter option
                 has_image = post['has_thumbnail'] or post["post_hint"] == 'image'
                 
-                # Check if row exists in filteredInformation
-                row = filteredInformation[filteredInformation['SampleID'] == post["SampleID"]]
-                row_dict = row.squeeze().to_dict() if not row.empty else {}
-
-                # Image validity check
-                has_valid_image = (
-                    row_dict.get("status") == "Exists" or
-                    not row_dict.get("has_thumbnail", True)
-                ) if not row.empty else True
-
-                if has_valid_image:
-                    posts_after_image_check += 1
-
-                # Comment validity check
-                has_valid_comments = (
-                    post.get('comments') != "[Removed]" and 
-                    post.get('comments') and 
-                    not all(comment['author'] in ['AutoModerator', post.get('author'), 'None']
-                            for comment in post.get('comments'))
-                )
-
-                if has_valid_comments:
-                    posts_after_comment_check += 1
-
+                # ok you have to check if has thumbnail..
+                # if yes then you jumpt to see if the same one exists. 
+                row=filteredInformation[filteredInformation['SampleID'] == post["SampleID"]]
+                # Check if comments are not "[Removed]" and filter specific authors
+                # has_valid_comments = (post.get('comments') != "[Removed]" and 
+                #                       post.get('comments') and 
+                #                       not all(comment['author'] == 'AutoModerator' or comment['author'] == 'None' for comment in post['comments']))
+                has_valid_comments = (post.get('comments') != "[Removed]" and 
+                                      post.get('comments') and 
+                                      not all(comment['author'] == 'AutoModerator' or comment['author'] == post.get('author') or comment['author'] == 'None' for comment in post.get('comments')))
+                if not row.empty:
+                    row_dict=row.squeeze().to_dict()
+                    has_valid_image = ( row_dict["status"]=="Exists" or row_dict["has_thumbnail"]==False)
+                else:
+                    has_valid_image = True
+                # has_valid_image = (not row.empty and ((row["post_hint"]=="image" and row["status"]=="Exists") or (not has_image)))
+                
+                
                 # Check if the post has not been seen by the user
-                is_unseen = (userID, post.get('subreddit'), post.get('id'), str(post.get('comment_index'))) not in st.session_state.keys()
+                is_unseen = (userID, post.get('subreddit'), post.get('id'), str(post.get('comment_index'))) not in session_state._state.keys()
                
-                # Apply final filters
-                if (
-                    (filter_option == 'All Posts' or
+                # Apply filters based on the filter_option and other conditions
+                if ((filter_option == 'All Posts' or
                      (filter_option == 'Only Posts With Images' and has_image) or
                      (filter_option == 'Only Posts Without Images' and not has_image)) and
-                    has_valid_comments and has_valid_image
-                ):
-                    post_identifier = (post.get('id'), str(post.get('comment_index')))
-                    if post_identifier not in validSet:
-                        validSet.add(post_identifier)
-                        valid_posts.append(post)
-                        posts_after_final_filter += 1
-    
-    # Store filter results in session state
-    st.session_state["test"] = {
-        "total_posts": total_posts,
-        "posts_after_image_check": posts_after_image_check,
-        "posts_after_comment_check": posts_after_comment_check,
-        "posts_after_final_filter": posts_after_final_filter,
-        "unique_sample_ids": len(filteredInformation["SampleID"].unique())
-    }
+                    has_valid_comments):
+                        if has_valid_image:
+                            if (post.get('id'), str(post.get('comment_index'))) not in validSet:
+                                validSet.add(post.get('reddit'),post.get('id'), str(post.get('comment_index')))
+                                valid_posts.append(post)
+    st.session_state["test"]=len(validSet), len(filteredInformation["SampleID"].unique())
     return
-
 def load_post_by_id(data, selected_subreddit, postID, commentID):
     if selected_subreddit in data:
         all_posts = data[selected_subreddit]
