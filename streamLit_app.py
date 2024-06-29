@@ -354,7 +354,7 @@ def load_random_post(selected_subreddit, userID, filter_option):
                 has_valid_comments = (post.get('comments') != "[Removed]" and 
                                       post.get('comments') and 
                                       not all(comment['author'] == 'AutoModerator' or comment['author'] == post.get('author') or comment['author'] == 'None' for comment in post.get('comments')))
-                has_valid_image = (row["post_hint"]=="image" and row["status"]=="Exists") or not has_image
+                has_valid_image = ((row["post_hint"]=="image" and row["status"]=="Exists") or (not has_image))
                 
                 # Check if the post has not been seen by the user
                 is_unseen = (userID, post.get('subreddit'), post.get('id'), str(post.get('comment_index'))) not in session_state._state.keys()
