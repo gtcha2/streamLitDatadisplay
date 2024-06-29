@@ -422,7 +422,7 @@ def doubleCheckLengths( userID, filter_option):
                     has_valid_comments):
                         if has_valid_image:
                             if (post.get('id'), str(post.get('comment_index'))) not in validSet:
-                                validSet.add((post.get('id'), str(post.get('comment_index'))))
+                                validSet.add((post.get('reddit'),post.get('id'), str(post.get('comment_index'))))
                                 valid_posts.append(post)
     st.session_state["test"]=len(validSet), len(filteredInformation["SampleID"].unique())
     return
