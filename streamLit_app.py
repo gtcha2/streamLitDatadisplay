@@ -361,7 +361,7 @@ def load_random_post(selected_subreddit, userID, filter_option):
                     has_valid_image = False 
                 # has_valid_image = (not row.empty and ((row["post_hint"]=="image" and row["status"]=="Exists") or (not has_image)))
                 
-                st.session_state["test"] = row.empty
+                st.session_state["test"] = row
                 # Check if the post has not been seen by the user
                 is_unseen = (userID, post.get('subreddit'), post.get('id'), str(post.get('comment_index'))) not in session_state._state.keys()
                
