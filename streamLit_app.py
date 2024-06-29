@@ -244,7 +244,7 @@ class JsonData:
                             'thumbnail': post['thumbnail'],
                             'thumbnail_width': post['thumbnail_width'],
                             'has_thumbnail': 1 if post['thumbnail'] not in ["self", "null", "default"] else 0,
-                            'SampleID':str(subreddit)+"_"+str(post[id])+"_"+str(i)
+                            'SampleID':str(subreddit)+"_"+str(post["id"])+"_"+str(i)
                         }
                         self.new_data[subreddit].append(new_post)
 
@@ -275,7 +275,7 @@ class JsonData:
                             'thumbnail': post['thumbnail'],
                             'thumbnail_width': post['thumbnail_width'],
                             'has_thumbnail': 1 if post['thumbnail'] not in ["self", "null", "default"] else 0,
-                            'SampleID':str(subreddit)+"_"+str(post[id])+"_"+str(i)
+                            'SampleID':str(subreddit)+"_"+str(post["id"])+"_"+str(i)
                         }
                         self.new_data[subreddit].append(new_post)
 
@@ -304,7 +304,7 @@ def preprocess_json_data(data):
                         'thumbnail': post['thumbnail'],
                         'thumbnail_width': post['thumbnail_width'],
                         'has_thumbnail': 1 if post['thumbnail'] not in ["self", "null", "default"] else 0,
-                        'SampleID':str(subreddit)+"_"+str(post[id])+"_"+str(i)
+                        'SampleID':str(subreddit)+"_"+str(post["id"])+"_"+str(i)
                     }
                     new_data[subreddit].append(new_post)
 
