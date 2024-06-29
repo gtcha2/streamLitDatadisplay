@@ -347,7 +347,7 @@ def load_random_post(selected_subreddit, userID, filter_option):
                 
                 # ok you have to check if has thumbnail..
                 # if yes then you jumpt to see if the same one exists. 
-                row=filteredInformation.loc[filteredInformation['SampleID'] == post["SampleID"]].squeeze()
+                row=filteredInformation.loc[filteredInformation['SampleID'] == post["SampleID"]]
                 # Check if comments are not "[Removed]" and filter specific authors
                 # has_valid_comments = (post.get('comments') != "[Removed]" and 
                 #                       post.get('comments') and 
