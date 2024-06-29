@@ -5,7 +5,7 @@ import random
 import os
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
-
+import pandas as pd
 # what else needs to be completed. 
 # i need to set up the login page. 
 st.set_page_config(page_title='Label Medical Misinformation', page_icon=':face_with_thermometer:', layout='wide')
@@ -13,6 +13,9 @@ st.set_page_config(page_title='Label Medical Misinformation', page_icon=':face_w
 # Initialize Google Sheets with service account credentials
 # gc = gspread.service_account(filename='llms-for-misinformation-196fdd9cebe7.json')
 # os.environ["reddit_data"]="reddit_dummy_data.json"
+filteredInformation=pd.read_csv("filtered_misinformation_data.csv")
+filteredInformation['SampleID'] = filteredInformation.apply(
+            lambda row: f"{row['subreddit']}_{row['id']}_{row['comment_index']}", axis=1)
 secrets_dict = {
     "type": st.secrets["type"],
     "project_id": st.secrets["project_id"],
@@ -240,7 +243,8 @@ class JsonData:
                             'comment_index': i,  # Add the comment index
                             'thumbnail': post['thumbnail'],
                             'thumbnail_width': post['thumbnail_width'],
-                            'has_thumbnail': 1 if post['thumbnail'] not in ["self", "null", "default"] else 0
+                            'has_thumbnail': 1 if post['thumbnail'] not in ["self", "null", "default"] else 0,
+                            'SampleID':str(subreddit)+"_"+str(post[id])+"_"+str(i)
                         }
                         self.new_data[subreddit].append(new_post)
 
@@ -270,7 +274,8 @@ class JsonData:
                             'comment_index': i,  # Add the comment index
                             'thumbnail': post['thumbnail'],
                             'thumbnail_width': post['thumbnail_width'],
-                            'has_thumbnail': 1 if post['thumbnail'] not in ["self", "null", "default"] else 0
+                            'has_thumbnail': 1 if post['thumbnail'] not in ["self", "null", "default"] else 0,
+                            'SampleID':str(subreddit)+"_"+str(post[id])+"_"+str(i)
                         }
                         self.new_data[subreddit].append(new_post)
 
@@ -298,7 +303,8 @@ def preprocess_json_data(data):
                         'comment_index': i,  # Add the comment index
                         'thumbnail': post['thumbnail'],
                         'thumbnail_width': post['thumbnail_width'],
-                        'has_thumbnail': 1 if post['thumbnail'] not in ["self", "null", "default"] else 0
+                        'has_thumbnail': 1 if post['thumbnail'] not in ["self", "null", "default"] else 0,
+                        'SampleID':str(subreddit)+"_"+str(post[id])+"_"+str(i)
                     }
                     new_data[subreddit].append(new_post)
 
@@ -338,7 +344,9 @@ def load_random_post(selected_subreddit, userID, filter_option):
             for post in all_posts:
                 # Check for image availability based on the filter option
                 has_image = post['has_thumbnail']
-                
+                # ok you have to check if has thumbnail..
+                # if yes then you jumpt to see if the same one exists. 
+                row=filteredInformation.loc[filteredInformation['SampleID'] == post["SampleID"]].squeeze()
                 # Check if comments are not "[Removed]" and filter specific authors
                 # has_valid_comments = (post.get('comments') != "[Removed]" and 
                 #                       post.get('comments') and 
@@ -346,6 +354,7 @@ def load_random_post(selected_subreddit, userID, filter_option):
                 has_valid_comments = (post.get('comments') != "[Removed]" and 
                                       post.get('comments') and 
                                       not all(comment['author'] == 'AutoModerator' or comment['author'] == post.get('author') or comment['author'] == 'None' for comment in post.get('comments')))
+                has_valid_image = (row["post_hint"]=="image" and row["status"]=="Exists") or not has_image
                 
                 # Check if the post has not been seen by the user
                 is_unseen = (userID, post.get('subreddit'), post.get('id'), str(post.get('comment_index'))) not in session_state._state.keys()
@@ -354,7 +363,7 @@ def load_random_post(selected_subreddit, userID, filter_option):
                 if ((filter_option == 'All Posts' or
                      (filter_option == 'Only Posts With Images' and has_image) or
                      (filter_option == 'Only Posts Without Images' and not has_image)) and
-                    has_valid_comments and is_unseen):
+                    has_valid_comments and is_unseen and has_valid_image):
                     if (post.get('id'), str(post.get('comment_index'))) not in validSet:
                         validSet.add((post.get('id'), str(post.get('comment_index'))))
                         valid_posts.append(post)
