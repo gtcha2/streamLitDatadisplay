@@ -245,7 +245,7 @@ class JsonData:
                             'thumbnail_width': post['thumbnail_width'],
                             'has_thumbnail': 1 if post['thumbnail'] not in ["self", "null", "default"] else 0,
                             'SampleID':str(subreddit)+"_"+str(post["id"])+"_"+str(i),
-                            'post_hint' : post.get('post_hint', 'None')
+                            "post_hint":post["post_hint"]
                         }
                         self.new_data[subreddit].append(new_post)
 
@@ -277,7 +277,7 @@ class JsonData:
                             'thumbnail_width': post['thumbnail_width'],
                             'has_thumbnail': 1 if post['thumbnail'] not in ["self", "null", "default"] else 0,
                             'SampleID':str(subreddit)+"_"+str(post["id"])+"_"+str(i),
-                            'post_hint' : post.get('post_hint', 'None')
+                            "post_hint":post["post_hint"]
                         }
                         self.new_data[subreddit].append(new_post)
 
@@ -307,7 +307,7 @@ def preprocess_json_data(data):
                         'thumbnail_width': post['thumbnail_width'],
                         'has_thumbnail': 1 if post['thumbnail'] not in ["self", "null", "default"] else 0,
                         'SampleID':str(subreddit)+"_"+str(post["id"])+"_"+str(i),
-                        'post_hint':post.get('post_hint', 'None')
+                        "post_hint":post["post_hint"]
                     }
                     new_data[subreddit].append(new_post)
 
@@ -424,9 +424,9 @@ def doubleCheckLengths( userID, filter_option):
                      (filter_option == 'Only Posts Without Images' and not has_image)) and
                     has_valid_comments and has_valid_image):
                             if (post.get('id'), str(post.get('comment_index'))) not in validSet:
-                                validSet.add((post.get('subreddit'),post.get('id'), str(post.get('comment_index'))))
+                                validSet.add(post.get('subreddit'),post.get('id'), str(post.get('comment_index')))
                                 valid_posts.append(post)
-    st.session_state["test"] = len(validSet), len(filteredInformation["SampleID"].unique())
+    st.session_state["test"]=len(validSet), len(filteredInformation["SampleID"].unique())
     return
 def load_post_by_id(data, selected_subreddit, postID, commentID):
     if selected_subreddit in data:
