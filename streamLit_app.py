@@ -378,13 +378,53 @@ def load_random_post(selected_subreddit, userID, filter_option):
             
             if valid_posts:
                 st.warning("you have "+ str(len(valid_posts))+" left in this subreddit for this filter")
-                st.session_state["test"] = len(valid_posts)
+                
                 random_post = random.choice(valid_posts)
                 return random_post
             else:
                 return None
     return None
-
+def doubleCheckLengths( userID, filter_option):
+    validSet=set()
+    valid_posts = []
+    for x in data:
+        all_posts = data[x]
+        if all_posts:
+            for post in all_posts:
+                # Check for image availability based on the filter option
+                has_image = post['has_thumbnail']
+                
+                # ok you have to check if has thumbnail..
+                # if yes then you jumpt to see if the same one exists. 
+                row=filteredInformation[filteredInformation['SampleID'] == post["SampleID"]]
+                # Check if comments are not "[Removed]" and filter specific authors
+                # has_valid_comments = (post.get('comments') != "[Removed]" and 
+                #                       post.get('comments') and 
+                #                       not all(comment['author'] == 'AutoModerator' or comment['author'] == 'None' for comment in post['comments']))
+                has_valid_comments = (post.get('comments') != "[Removed]" and 
+                                      post.get('comments') and 
+                                      not all(comment['author'] == 'AutoModerator' or comment['author'] == post.get('author') or comment['author'] == 'None' for comment in post.get('comments')))
+                if not row.empty:
+                    row_dict=row.squeeze().to_dict()
+                    has_valid_image = ((row_dict["post_hint"]=="image" and row_dict["status"]=="Exists") or (not has_image))
+                else:
+                    has_valid_image = not has_image 
+                # has_valid_image = (not row.empty and ((row["post_hint"]=="image" and row["status"]=="Exists") or (not has_image)))
+                
+                
+                # Check if the post has not been seen by the user
+                is_unseen = (userID, post.get('subreddit'), post.get('id'), str(post.get('comment_index'))) not in session_state._state.keys()
+               
+                # Apply filters based on the filter_option and other conditions
+                if ((filter_option == 'All Posts' or
+                     (filter_option == 'Only Posts With Images' and has_image) or
+                     (filter_option == 'Only Posts Without Images' and not has_image)) and
+                    has_valid_comments and is_unseen and has_valid_image ):
+                    if (post.get('id'), str(post.get('comment_index'))) not in validSet:
+                        validSet.add((post.get('id'), str(post.get('comment_index'))))
+                        valid_posts.append(post)
+    st.session_state["test"]=len(validSet), len(filteredInformation)
+    return
 def load_post_by_id(data, selected_subreddit, postID, commentID):
     if selected_subreddit in data:
         all_posts = data[selected_subreddit]
@@ -503,7 +543,7 @@ with st.container():
 
             # Load a new random post and store it in the session state
             st.session_state.random_post = load_random_post(selected_subreddit, userID, image_filter_option)
-            
+            doubleCheckLengths(userID,image_filter_option)
         evalCount=compareCounts(user_evaluations,data,selected_subreddit,userID)
         
         # Get the updated random_post
