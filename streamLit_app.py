@@ -411,7 +411,7 @@ def doubleCheckLengths( userID, filter_option):
                     row_dict=row.squeeze().to_dict()
                     has_valid_image = ( row_dict["status"]=="Exists" or row_dict["has_thumbnail"]==False)
                 else:
-                    has_valid_image = True
+                    has_valid_image = has_valid_comments
                 # has_valid_image = (not row.empty and ((row["post_hint"]=="image" and row["status"]=="Exists") or (not has_image)))
                 
                 
@@ -423,7 +423,7 @@ def doubleCheckLengths( userID, filter_option):
                      (filter_option == 'Only Posts With Images' and has_image) or
                      (filter_option == 'Only Posts Without Images' and not has_image)) and
                     has_valid_comments and has_valid_image):
-                            if (post.get('id'), str(post.get('comment_index'))) not in validSet:
+                            if (post.get('subreddit'),post.get('id'), str(post.get('comment_index'))) not in validSet:
                                 validSet.add(post.get('subreddit'),post.get('id'), str(post.get('comment_index')))
                                 valid_posts.append(post)
     st.session_state["test"]=len(validSet), len(filteredInformation["SampleID"].unique())
