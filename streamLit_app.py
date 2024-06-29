@@ -395,7 +395,7 @@ def doubleCheckLengths( userID, filter_option):
         if all_posts:
             for post in all_posts:
                 # Check for image availability based on the filter option
-                has_image = post['has_thumbnail'] or post["post_hint"] == 'image'
+                has_image = post['has_thumbnail'] 
                 
                 # ok you have to check if has thumbnail..
                 # if yes then you jumpt to see if the same one exists. 
